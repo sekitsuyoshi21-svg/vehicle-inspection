@@ -1,0 +1,166 @@
+/* MyGeotab本体のスタイルと干渉しないよう、すべて #didcomTemp 配下に限定 */
+#didcomTemp {
+  --bg: #f5f7fa; --card: #fff; --text: #1f2937; --muted: #6b7280; --line: #e5e7eb;
+  --accent: #0b5cad; --ok: #15803d; --ng: #dc2626; --stale: #b45309; --band: rgba(21,128,61,.08);
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+  color: var(--text); background: var(--bg); padding: 16px; box-sizing: border-box; min-height: 100%;
+  font-size: 14px;
+}
+#didcomTemp *, #didcomTemp *::before, #didcomTemp *::after { box-sizing: border-box; }
+#didcomTemp h1 { font-size: 20px; margin: 0; }
+#didcomTemp h2 { font-size: 15px; margin: 0; }
+#didcomTemp .dt-muted { color: var(--muted); font-size: 12px; }
+
+#didcomTemp .dt-header { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+#didcomTemp .dt-title { display: flex; align-items: center; gap: 10px; }
+#didcomTemp .dt-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+#didcomTemp .dt-badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #e0e7ff; color: #3730a3; }
+#didcomTemp .dt-badge.demo { background: #fef3c7; color: #92400e; }
+#didcomTemp select, #didcomTemp input[type=number], #didcomTemp input[type=search] {
+  font: inherit; padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--text);
+}
+#didcomTemp .dt-btn { font: inherit; padding: 6px 14px; border-radius: 6px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
+#didcomTemp .dt-btn-ghost { background: #fff; color: var(--accent); }
+#didcomTemp .dt-btn:disabled { opacity: .5; cursor: default; }
+#didcomTemp .dt-check { display: flex; align-items: center; gap: 4px; }
+
+#didcomTemp .dt-message { padding: 10px 14px; border-radius: 8px; margin-bottom: 12px; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+#didcomTemp .dt-message.info { background: #eff6ff; color: #1e40af; border-color: #bfdbfe; }
+
+#didcomTemp .dt-kpi.rise { border-left-color: #ea580c; }
+#didcomTemp .dt-kpi.rise strong { color: #ea580c; }
+/* 警告カード：0件は薄い色、1件以上は塗りつぶし */
+#didcomTemp .dt-kpi.ng { background: #fef2f2; border-color: #fecaca; border-left-color: var(--ng); }
+#didcomTemp .dt-kpi.rise { background: #fff7ed; border-color: #fed7aa; border-left-color: #ea580c; }
+#didcomTemp .dt-kpi.ng.active { background: #dc2626; border-color: #dc2626; box-shadow: 0 2px 8px rgba(220,38,38,.35); }
+#didcomTemp .dt-kpi.rise.active { background: #fb923c; border-color: #f97316; border-left-color: #c2410c; box-shadow: 0 2px 8px rgba(234,88,12,.3); }
+#didcomTemp .dt-kpi.ng.active span, #didcomTemp .dt-kpi.ng.active strong { color: #fff; }
+/* 急上昇は中間のオレンジ。読みやすいよう文字は濃い茶色 */
+#didcomTemp .dt-kpi.rise.active span, #didcomTemp .dt-kpi.rise.active strong { color: #431407; }
+#didcomTemp .dt-kpi.ng.active span, #didcomTemp .dt-kpi.rise.active span { font-weight: 700; }
+#didcomTemp .dt-status.rise { background: #ea580c; }
+#didcomTemp .dt-rate { font-size: 11px; color: var(--muted); margin-left: 6px; font-weight: 400; }
+#didcomTemp .dt-rate.up { color: #ea580c; font-weight: 700; }
+#didcomTemp .dt-stats div.dt-rise { background: #fff7ed; border: 1px solid #fdba74; }
+#didcomTemp .dt-stats div.dt-rise strong { color: #c2410c; }
+#didcomTemp .dt-legend i.dt-rise-swatch { height: 6px; border-radius: 3px; }
+#didcomTemp .dt-kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 12px; }
+#didcomTemp .dt-kpi { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; border-left: 4px solid var(--accent); }
+#didcomTemp .dt-kpi span { display: block; color: var(--muted); font-size: 12px; }
+#didcomTemp .dt-kpi strong { font-size: 26px; font-variant-numeric: tabular-nums; }
+#didcomTemp .dt-kpi.ok { border-left-color: var(--ok); }
+#didcomTemp .dt-kpi.ng { border-left-color: var(--ng); }
+#didcomTemp .dt-kpi.ng strong { color: var(--ng); }
+#didcomTemp .dt-kpi.stale { background: #f8fafc; border-color: #e2e8f0; border-left-color: #64748b; }
+#didcomTemp .dt-kpi.stale.active { background: #94a3b8; border-color: #64748b; border-left-color: #475569; box-shadow: 0 2px 8px rgba(71,85,105,.3); }
+/* 中間のグレー。読みやすいよう文字は濃いグレー */
+#didcomTemp .dt-kpi.stale.active span, #didcomTemp .dt-kpi.stale.active strong { color: #0f172a; }
+#didcomTemp .dt-kpi.stale.active span { font-weight: 700; }
+
+#didcomTemp .dt-main { display: grid; grid-template-columns: minmax(320px, 2fr) 3fr; gap: 12px; margin-bottom: 12px; }
+#didcomTemp .dt-card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+#didcomTemp .dt-card-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+#didcomTemp .dt-table-wrap { max-height: 380px; overflow: auto; }
+#didcomTemp .dt-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+#didcomTemp .dt-table th { position: sticky; top: 0; background: #f9fafb; text-align: left; font-weight: 600; font-size: 12px; color: var(--muted); }
+#didcomTemp .dt-table th, #didcomTemp .dt-table td { padding: 7px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+#didcomTemp #dt-vehicles tr { cursor: pointer; }
+#didcomTemp #dt-vehicles tr:hover { background: #f3f4f6; }
+#didcomTemp #dt-vehicles tr.selected { background: #e8f0fb; }
+#didcomTemp .dt-temp { display: block; }
+#didcomTemp .dt-temp.ng { color: var(--ng); font-weight: 700; }
+#didcomTemp .dt-temp small { color: var(--muted); font-weight: 400; margin-right: 4px; }
+#didcomTemp .dt-status { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px; color: #fff; }
+#didcomTemp .dt-status.ok { background: var(--ok); }
+#didcomTemp .dt-status.ng { background: var(--ng); }
+#didcomTemp .dt-status.stale { background: #64748b; }
+#didcomTemp .dt-status.none { background: #9ca3af; }
+#didcomTemp .dt-ongoing { color: var(--ng); font-weight: 700; }
+
+#didcomTemp .dt-chart { width: 100%; min-height: 300px; position: relative; touch-action: pan-y; cursor: crosshair; user-select: none; -webkit-user-select: none; }
+#didcomTemp .dt-head-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+#didcomTemp .dt-btn-sm { padding: 3px 10px; font-size: 12px; }
+#didcomTemp .dt-btn[hidden] { display: none; }
+#didcomTemp .dt-btn-save { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 13px; font-weight: 700;
+  border-radius: 6px; color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.18); }
+#didcomTemp .dt-btn-save svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+#didcomTemp .dt-btn-png { background: #0b5cad; border-color: #0b5cad; }
+#didcomTemp .dt-btn-png:hover { background: #094a8c; }
+#didcomTemp .dt-btn-pdf { background: #dc2626; border-color: #dc2626; }
+#didcomTemp .dt-btn-pdf:hover { background: #b91c1c; }
+#didcomTemp .dt-btn-save:disabled { opacity: .6; }
+#didcomTemp .dt-legend .dt-hint { margin-left: auto; display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px;
+  background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; color: #1e40af; font-size: 12px; font-weight: 600; }
+#didcomTemp .dt-legend .dt-hint em { font-style: normal; }
+#didcomTemp .dt-legend .dt-hint svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+#didcomTemp .dt-legend .dt-hint-sep { width: 1px; height: 12px; background: #93c5fd; margin: 0 4px; }
+#didcomTemp .dt-legend i.dt-th-swatch { width: 16px; height: 0; background: none; border-top: 2px dashed #dc2626; }
+#didcomTemp .dt-legend i.dt-out-swatch { height: 4px; border-radius: 2px; }
+#didcomTemp .dt-legend i.dt-dot { width: 7px; height: 7px; border-radius: 50%; background: #6b7280; }
+#didcomTemp .dt-tip { position: absolute; z-index: 5; pointer-events: none; background: #fff; border: 1px solid var(--line); border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.12); padding: 6px 10px; font-size: 12px; white-space: nowrap; line-height: 1.7; }
+#didcomTemp .dt-tip[hidden] { display: none; }
+#didcomTemp .dt-tip-time { font-weight: 700; border-bottom: 1px solid var(--line); margin-bottom: 2px; }
+#didcomTemp .dt-tip i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+#didcomTemp .dt-tip b { margin-left: 8px; font-variant-numeric: tabular-nums; }
+#didcomTemp .dt-tip b.ng { color: var(--ng); }
+#didcomTemp .dt-tip b.dt-est-val { font-style: italic; }
+#didcomTemp .dt-tip-place { margin-top: 3px; padding-top: 4px; border-top: 1px dashed var(--line); white-space: nowrap; }
+#didcomTemp .dt-tip-place-label { color: var(--muted); margin-right: 8px; }
+#didcomTemp .dt-est-tag { display: inline-block; margin-left: 6px; font-size: 10px; padding: 0 6px; border-radius: 8px; background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; line-height: 1.6; }
+#didcomTemp .dt-stats div.dt-est { background: #fffbeb; border: 1px dashed #f59e0b; }
+#didcomTemp .dt-stats div.dt-est span { color: #92400e; }
+#didcomTemp .dt-stats div.dt-est strong { font-style: italic; color: #78350f; }
+#didcomTemp .dt-est-note { grid-column: 1 / -1; margin: 0; font-size: 11px; color: #92400e; }
+#didcomTemp .dt-chart svg { width: 100%; height: 300px; display: block; }
+/* 大きく表示（グラフのカードを画面いっぱいに） */
+#didcomTemp .dt-btn-full { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 13px; font-weight: 700;
+  border-radius: 6px; background: #fff; color: #0b5cad; border: 1.5px solid #0b5cad; }
+#didcomTemp .dt-btn-full:hover { background: #eff6ff; }
+#didcomTemp .dt-btn-full svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+#didcomTemp .dt-detail.dt-full { position: fixed; inset: 0; z-index: 10000; margin: 0; border-radius: 0; border: 0; overflow: auto; padding: 14px 24px;
+  box-shadow: 0 0 0 1px var(--line); }
+#didcomTemp .dt-detail.dt-full .dt-card-head h2 { font-size: 18px; }
+#didcomTemp .dt-detail.dt-full .dt-chart svg { height: auto; }
+/* 大きく表示中も見出し（元に戻すボタン）を常に表示 */
+#didcomTemp .dt-detail.dt-full .dt-card-head { position: sticky; top: -14px; z-index: 6; background: var(--card); padding: 6px 0; margin-top: -6px; }
+#didcomTemp .dt-btn-full.on { background: #0b5cad; color: #fff; }
+/* 大きく表示中、グラフ右上の縮小ボタン */
+#didcomTemp .dt-chart-tools { position: absolute; top: 18px; right: 20px; z-index: 4; display: flex; gap: 6px; }
+#didcomTemp .dt-chart-tools button { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; font: inherit; font-size: 13px; font-weight: 700;
+  color: #fff; background: #0b5cad; border: 0; border-radius: 6px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,.25); }
+#didcomTemp .dt-chart-tools button:hover { background: #094a8c; }
+#didcomTemp .dt-chart-tools button[data-size="normal"] { background: #fff; color: #0b5cad; border: 1.5px solid #0b5cad; }
+#didcomTemp .dt-chart-tools svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+/* 小さく表示 */
+#didcomTemp .dt-detail.dt-small .dt-chart { min-height: 190px; }
+#didcomTemp .dt-detail.dt-small .dt-chart svg { height: 190px; }
+#didcomTemp .dt-chart .empty { color: var(--muted); padding: 100px 0; text-align: center; }
+#didcomTemp .dt-legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; margin-top: 4px; }
+#didcomTemp .dt-legend i { display: inline-block; width: 14px; height: 3px; vertical-align: middle; margin-right: 4px; }
+#didcomTemp .dt-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-top: 10px; }
+#didcomTemp .dt-legend i.dt-door-swatch { height: 10px; border: 1px solid rgba(202,138,4,.6); }
+#didcomTemp .dt-door-tag { display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 10px; background: #fef3c7; color: #92400e; }
+#didcomTemp fieldset label.dt-inline { flex-direction: row; align-items: center; gap: 6px; margin-top: 8px; color: var(--text); }
+#didcomTemp .dt-stats div { background: #f9fafb; border-radius: 6px; padding: 6px 10px; }
+#didcomTemp .dt-stats span { display: block; font-size: 11px; color: var(--muted); }
+#didcomTemp .dt-stats strong { font-variant-numeric: tabular-nums; }
+
+#didcomTemp .dt-modal { position: fixed; inset: 0; background: rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+#didcomTemp .dt-modal[hidden] { display: none; }
+#didcomTemp .dt-modal-body { background: #fff; border-radius: 10px; padding: 18px 20px; width: min(640px, 94vw); max-height: 90vh; overflow: auto; }
+#didcomTemp fieldset { border: 1px solid var(--line); border-radius: 8px; margin: 12px 0; padding: 10px 12px; }
+#didcomTemp legend { font-weight: 600; padding: 0 4px; }
+#didcomTemp fieldset label { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--muted); flex: 1; }
+#didcomTemp .dt-row { display: flex; gap: 10px; margin: 8px 0; align-items: flex-end; }
+#didcomTemp .dt-row input[type=search] { flex: 1; }
+#didcomTemp .dt-diag-list { max-height: 220px; overflow: auto; border: 1px solid var(--line); border-radius: 6px; }
+#didcomTemp .dt-diag-list label { flex-direction: row; align-items: center; gap: 8px; padding: 6px 10px; border-bottom: 1px solid var(--line); color: var(--text); font-size: 13px; }
+#didcomTemp .dt-diag-list code { color: var(--muted); font-size: 11px; }
+#didcomTemp .dt-modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+@media (max-width: 900px) {
+  #didcomTemp .dt-main { grid-template-columns: 1fr; }
+  #didcomTemp .dt-kpis { grid-template-columns: repeat(3, 1fr); }
+  #didcomTemp .dt-stats { grid-template-columns: repeat(2, 1fr); }
+}

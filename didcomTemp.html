@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>温度モニター</title>
+  <link rel="stylesheet" href="didcomTemp.css?v=0.10.3">
+</head>
+<body>
+<div id="didcomTemp">
+  <header class="dt-header">
+    <div class="dt-title">
+      <h1>温度モニター</h1>
+      <span id="dt-source" class="dt-badge">-</span>
+    </div>
+    <div class="dt-controls">
+      <label>期間
+        <select id="dt-hours">
+          <option value="6">直近6時間</option>
+          <option value="12">直近12時間</option>
+          <option value="24" selected>直近24時間</option>
+          <option value="48">直近48時間</option>
+          <option value="168">直近7日</option>
+        </select>
+      </label>
+      <label class="dt-check"><input type="checkbox" id="dt-auto" checked> 自動更新 (5分)</label>
+      <button id="dt-refresh" class="dt-btn">更新</button>
+      <button id="dt-open-settings" class="dt-btn dt-btn-ghost">設定</button>
+    </div>
+  </header>
+
+  <div id="dt-message" class="dt-message" hidden></div>
+
+  <section class="dt-kpis">
+    <div class="dt-kpi"><span>監視車両</span><strong id="kpi-total">-</strong></div>
+    <div class="dt-kpi ok"><span>正常</span><strong id="kpi-ok">-</strong></div>
+    <div class="dt-kpi ng"><span>温度逸脱中</span><strong id="kpi-ng">-</strong></div>
+    <div class="dt-kpi rise"><span>急上昇</span><strong id="kpi-rise">-</strong></div>
+    <div class="dt-kpi stale"><span>データ未受信</span><strong id="kpi-stale">-</strong></div>
+    <div class="dt-kpi"><span>期間内の逸脱件数</span><strong id="kpi-events">-</strong></div>
+  </section>
+
+  <section class="dt-main">
+    <div class="dt-card dt-list">
+      <div class="dt-card-head">
+        <h2>車両一覧</h2>
+        <input type="search" id="dt-filter" placeholder="車両名で絞り込み">
+      </div>
+      <div class="dt-table-wrap">
+        <table class="dt-table">
+          <thead><tr><th>状態</th><th>車両</th><th>最新温度</th><th>最終受信</th></tr></thead>
+          <tbody id="dt-vehicles"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="dt-card dt-detail">
+      <div class="dt-card-head">
+        <h2 id="dt-detail-title">温度推移</h2>
+        <span class="dt-head-right">
+          <span id="dt-range-label" class="dt-muted"></span>
+          <button id="dt-zoom-reset" class="dt-btn dt-btn-ghost dt-btn-sm" hidden>全体表示に戻す</button>
+          <button id="dt-small" class="dt-btn dt-btn-full" title="グラフを低く小さく表示">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4v5H4"/><path d="M15 4v5h5"/><path d="M9 20v-5H4"/><path d="M15 20v-5h5"/></svg><span>小さく表示</span></button>
+          <button id="dt-full" class="dt-btn dt-btn-full" title="グラフを画面いっぱいに大きく表示（Escで戻る）">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5"/><path d="M20 9V4h-5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/></svg><span>大きく表示</span></button>
+          <button id="dt-save-png" class="dt-btn dt-btn-save dt-btn-png" title="表示中のグラフと統計をPNG画像で保存">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5-9 8"/></svg>画像保存</button>
+          <button id="dt-save-pdf" class="dt-btn dt-btn-save dt-btn-pdf" title="表示中のグラフと統計をPDF（A4横）で保存">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>PDF保存</button>
+        </span>
+      </div>
+      <div id="dt-chart" class="dt-chart"></div>
+      <div id="dt-legend" class="dt-legend"></div>
+      <div id="dt-stats" class="dt-stats"></div>
+    </div>
+  </section>
+
+  <section class="dt-card">
+    <div class="dt-card-head">
+      <h2>温度逸脱履歴</h2>
+      <button id="dt-csv" class="dt-btn dt-btn-ghost">CSV出力</button>
+    </div>
+    <div class="dt-table-wrap">
+      <table class="dt-table">
+        <thead><tr><th>車両</th><th>センサー</th><th>開始</th><th>終了</th><th>継続時間</th><th>最高/最低</th><th title="逸脱開始の15分前〜逸脱終了までにドア開があったか">ドア開</th></tr></thead>
+        <tbody id="dt-events"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 設定 -->
+  <div id="dt-settings" class="dt-modal" hidden>
+    <div class="dt-modal-body">
+      <h2>設定</h2>
+
+      <fieldset>
+        <legend>温度しきい値</legend>
+        <label>プロファイル
+          <select id="set-profile">
+            <option value="frozen">冷凍 (-25〜-18℃)</option>
+            <option value="chilled">冷蔵 (0〜10℃)</option>
+            <option value="constant">定温 (15〜25℃)</option>
+            <option value="custom">カスタム</option>
+          </select>
+        </label>
+        <div class="dt-row">
+          <label>下限 (℃) <input type="number" step="0.1" id="set-min"></label>
+          <label>上限 (℃) <input type="number" step="0.1" id="set-max"></label>
+        </div>
+        <div class="dt-row">
+          <label>逸脱とみなす最短継続 (分) <input type="number" min="0" id="set-minex"></label>
+          <label>「データ未受信」とみなす時間 (分) <input type="number" min="1" id="set-stale"></label>
+        </div>
+        <p class="dt-muted">ドア開閉などの短時間の上昇を除外するには「最短継続」を設定してください。</p>
+        <div class="dt-row">
+          <label>急上昇とみなす速度 (℃/時、0で無効) <input type="number" step="0.5" min="0" id="set-rise"></label>
+          <label>速度の計算期間 (分) <input type="number" min="10" step="5" id="set-risewin"></label>
+        </div>
+        <p class="dt-muted">基準温度の範囲内でも、温度がこの速さ以上で上昇していれば「急上昇」として知らせます（冷凍機の故障の早期発見用）。</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>対象の診断項目（温度センサー）</legend>
+        <div class="dt-row">
+          <input type="search" id="set-diag-query" placeholder="例: Temperature, 温度, Didcom">
+          <button id="set-diag-search" class="dt-btn">検索</button>
+        </div>
+        <p class="dt-muted">MyGeotabに登録されている診断項目（Diagnostic）を検索し、Didcomの温度センサーに該当するものを選んでください。</p>
+        <div id="set-diag-list" class="dt-diag-list"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>ドア開閉（接点センサー）</legend>
+        <div class="dt-row">
+          <input type="search" id="set-door-query" placeholder="例: Contact sensor, コンタクト, 接触">
+          <button id="set-door-search" class="dt-btn">検索</button>
+        </div>
+        <p class="dt-muted">選ぶと、ドアが開いていた時間を温度グラフに黄色の帯で重ねて表示します。TPM+の「デバイス設定 → 接点センサー」の「診断」欄に表示されている項目を選んでください。</p>
+        <div id="set-door-list" class="dt-diag-list"></div>
+        <label class="dt-inline"><input type="checkbox" id="set-door-invert"> 値を反転する（0 を「開」として扱う）</label>
+      </fieldset>
+
+      <div class="dt-modal-actions">
+        <button id="set-cancel" class="dt-btn dt-btn-ghost">キャンセル</button>
+        <button id="set-save" class="dt-btn">保存して更新</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="didcomTemp.js?v=0.10.3"></script>
+</body>
+</html>
